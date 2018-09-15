@@ -2,15 +2,23 @@ package com.sshtukin.gifsearcher;
 
 import android.content.ContentProvider;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.sshtukin.gifsearcher.model.Datum;
 
 import java.util.List;
@@ -36,14 +44,33 @@ public class GifRecyclerViewApadper extends RecyclerView.Adapter<GifRecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GifHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GifHolder holder, int position) {
         if (mDatumList.size() > 0) {
             GlideApp
                     .with(mContext)
                     .load(mDatumList.get(position).getImages().getOriginal().getUrl())
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
                     .into(holder.mImageView);
         }
+
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return position;
     }
 
     @Override
@@ -53,10 +80,13 @@ public class GifRecyclerViewApadper extends RecyclerView.Adapter<GifRecyclerView
 
     public class GifHolder extends RecyclerView.ViewHolder{
         ImageView mImageView;
+        ProgressBar mProgressBar;
+
 
         public GifHolder(LayoutInflater layoutInflater, ViewGroup parent) {
             super(layoutInflater.inflate(R.layout.git_item, parent, false));
             mImageView = itemView.findViewById(R.id.imageView);
+            mProgressBar = itemView.findViewById(R.id.progress);
         }
     }
 }

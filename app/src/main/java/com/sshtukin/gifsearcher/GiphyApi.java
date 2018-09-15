@@ -10,4 +10,9 @@ public interface GiphyApi {
     @GET("/v1/gifs/trending")
     Call<GiphyModel> getTrending(@Query("api_key")String apiKey);
 
+    @GET("/v1/gifs/search")
+    Call<GiphyModel> getSearch(@Query("api_key")String apiKey,
+                               @Query("q")String query);
+
+
 }

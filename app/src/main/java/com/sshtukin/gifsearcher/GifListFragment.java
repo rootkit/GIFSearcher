@@ -116,7 +116,6 @@ public class GifListFragment extends Fragment {
                 if(isScrolling&& (layoutManager.getChildCount() + layoutManager.findFirstVisibleItemPosition()
                         == layoutManager.getItemCount())){
                     isScrolling = false;
-                    mOffset += GIF_NUMBER;
                     loadGifs(mCurrentMode, mRequest);
                 }
             }

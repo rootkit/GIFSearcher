@@ -131,7 +131,7 @@ public class GifListFragment extends Fragment {
             mGifApadper.wipeItems();
             mCurrentMode = mode;
         } else {
-            mOffset += 25;
+            mOffset += GIF_NUMBER;
         }
 
         if (mode == TRENDING_MODE){

@@ -17,6 +17,7 @@ public class FixedHeightSmall {
         this.url = url;
     }
 
+
     @SerializedName("width")
     @Expose
     private String width;

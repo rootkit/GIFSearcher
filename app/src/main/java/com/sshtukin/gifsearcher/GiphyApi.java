@@ -8,11 +8,13 @@ import retrofit2.http.Query;
 public interface GiphyApi {
 
     @GET("/v1/gifs/trending")
-    Call<GiphyModel> getTrending(@Query("api_key")String apiKey);
+    Call<GiphyModel> getTrending(@Query("api_key")String apiKey,
+                                 @Query("offset") int offset);
 
     @GET("/v1/gifs/search")
     Call<GiphyModel> getSearch(@Query("api_key")String apiKey,
-                               @Query("q")String query);
+                               @Query("q")String query,
+                               @Query("offset") int offset);
 
 
 }

@@ -3,7 +3,7 @@ package com.sshtukin.gifsearcher.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Original {
+public class FixedHeightSmall {
 
     @SerializedName("url")
     @Expose

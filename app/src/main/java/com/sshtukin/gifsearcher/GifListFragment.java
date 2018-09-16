@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.sshtukin.gifsearcher.model.Datum;
 import com.sshtukin.gifsearcher.model.GiphyModel;
 
@@ -42,6 +48,7 @@ public class GifListFragment extends Fragment {
     private GiphyApi mClient;
     private Retrofit mRetrofit;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,16 +72,19 @@ public class GifListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gif_list,
-                container, false);
+        View view = inflater.inflate(R.layout.fragment_gif_list, container, false);
         setHasOptionsMenu(true);
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getActivity());
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setAlignItems(AlignItems.STRETCH);
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         if (mGifRecyclerViewApadper  == null) {
-            mGifRecyclerViewApadper = new GifRecyclerViewApadper(getActivity(), new ArrayList<Datum>());
+            mGifRecyclerViewApadper = new GifRecyclerViewApadper(getActivity());
             mRetrofit = RetrofitClient.getClient(BASE_URL);
             mClient = mRetrofit.create(GiphyApi.class);
             call_enqueue(getCall());
@@ -84,10 +94,6 @@ public class GifListFragment extends Fragment {
         }
         mRecyclerView.setAdapter(mGifRecyclerViewApadper);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
-                LinearLayoutManager.VERTICAL);
-        dividerItemDecoration.setDrawable(getContext().getResources().getDrawable(R.drawable.line_divider));
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
         return view;
     }
 
